@@ -40,23 +40,16 @@ func NewCmdVerifyAsset(f *cmdutil.Factory, runF func(*VerifyAssetConfig) error) 
 
 	cmd := &cobra.Command{
 		Use:   "verify-asset [<tag>] <file-path>",
-		Short: "Verify that a given asset originated from a specific GitHub Release.",
+		Short: "Verify that a given asset originated from a release",
 		Long: heredoc.Doc(`
 			Verify that a given asset file originated from a specific GitHub Release using cryptographically signed attestations.
 
-			## Understanding Verification
-
 			An attestation is a claim made by GitHub regarding a release and its assets.
 
-			## What This Command Does
-
-			This command checks that the asset you provide matches an attestation produced by GitHub for a particular release. 
-			It ensures the asset's integrity by validating:
-			* The asset's digest matches the subject in the attestation
-			* The attestation is associated with the specified release
+  			This command checks that the asset you provide matches a valid attestation for the specified release (or the latest release, if no tag is given).
+			It ensures the asset's integrity by validating that the asset's digest matches the subject in the attestation and that the attestation is associated with the release.
 		`),
-		Hidden: true,
-		Args:   cobra.MaximumNArgs(2),
+		Args: cobra.MaximumNArgs(2),
 		Example: heredoc.Doc(`
 			# Verify an asset from the latest release
 			$ gh release verify-asset ./dist/my-asset.zip
