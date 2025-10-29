@@ -264,6 +264,9 @@ func (fwd *CodespacesPortForwarder) UpdatePortVisibility(ctx context.Context, re
 	}
 
 	// Delete the existing tunnel port to update
+	if remotePort < 0 || remotePort > 65535 {
+		return fmt.Errorf("remote port %d is out of range (0-65535)", remotePort)
+	}
 	err = fwd.connection.TunnelManager.DeleteTunnelPort(ctx, fwd.connection.Tunnel, uint16(remotePort), fwd.connection.Options)
 	if err != nil {
 		return fmt.Errorf("error deleting tunnel port: %w", err)
